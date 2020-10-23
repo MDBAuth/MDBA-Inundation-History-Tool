@@ -1,0 +1,1 @@
+A folder to uplaod shapefiles for defining an area of interest in the Inundation History Tool
