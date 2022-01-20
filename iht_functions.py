@@ -514,17 +514,16 @@ class ScatterUpdatePoint:
     def scatter_update_point(self, trace, points, selector):
         ''' Reclassify the points based on user selection '''
         try:
-            if self.s_only:
-                # TODO-MDBA, this is logically equivalent to previous code, I'm unsure if skipping
-                # this function for s_only is intended.
+            if s.only:
                 return
             # There is no valid Sentinel-2 data
             try:
                 date = points.xs[0]
+                date = datetime.strptime(date, '%Y-%m-%d')
                 row_name = self.master_df_reindex.loc[self.master_df_reindex['date'] == date]
                 status = "accept"
                 if date in self.ls_only.index:
-                    point_type = "land_sat"
+                    point_type = "landsat"
                     if row_name['sat_result'].iloc[0] == 'landsat accept':
                         status = "reject"
                 for p in point_type:
@@ -541,6 +540,7 @@ class ScatterUpdatePoint:
             # There is valid Sentinel-2 data
             try:
                 date = points.xs[0]
+                date = datetime.strptime(date, '%Y-%m-%d')
                 row_name = self.master_df_reindex.loc[self.master_df_reindex['date'] == date]
                 status = "accept"
                 point_type = []
@@ -660,3 +660,6 @@ def addAcceptRejectGraph(s_only, ls_only, master_df_reindex, clean_gauge_data, f
                                        passing_failing_graph, scatter)
     scatter.on_click(scatter_point.scatter_update_point)
     return passing_failing_graph
+
+""
+

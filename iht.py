@@ -1,6 +1,7 @@
 # +
 # %matplotlib inline
 import datetime
+import copy
 import pprint
 from typing import List, Tuple
 import pandas as pd
@@ -286,46 +287,45 @@ class IhtValues:
     shapefile_name: str = None
     
     def __init__(self) -> None:
-        self.deploy_environment = deploy_environment.value
+        self.deploy_environment = copy.deepcopy(deploy_environment.value)
         
-        self.start_date = start_date.value # TODO deepcopy
-        self.end_date = end_date.value
-        self.gauge_num = gauge_num.value
+        self.start_date = copy.deepcopy(start_date.value)
+        self.end_date = copy.deepcopy(end_date.value)
+        self.gauge_num = copy.deepcopy(gauge_num.value)
 
-        self.min_flow = min_flow.value
-        self.max_flow = max_flow.value
-        self.band_option = band_option.value
-        self.summary_band_option = summary_band_option.value
-        self.water_threshold = water_threshold.value
+        self.min_flow = copy.deepcopy(min_flow.value)
+        self.max_flow = copy.deepcopy(max_flow.value)
+        self.band_option = copy.deepcopy(band_option.value)
+        self.summary_band_option = copy.deepcopy(summary_band_option.value)
+        self.water_threshold = copy.deepcopy(water_threshold.value)
 
-        self.export_images = export_images.value
-        self.export_summary_images = export_summary_images.value
-        self.cloud_threshold = cloud_threshold.value
+        self.export_images = copy.deepcopy(export_images.value)
+        self.export_summary_images = copy.deepcopy(export_summary_images.value)
+        self.cloud_threshold = copy.deepcopy(cloud_threshold.value)
 
-        self.check_gauge = check_gauge.value
-        self.check_own = check_own.value
+        self.check_gauge = copy.deepcopy(check_gauge.value)
+        self.check_own = copy.deepcopy(check_own.value)
 
-        self.check_shapefile = check_shapefile.value
+        self.check_shapefile = copy.deepcopy(check_shapefile.value)
         
-        self.slc_option = slc_option.value
+        self.slc_option = copy.deepcopy(slc_option.value)
 
-        self.input_lon: input_lon.value
-        self.input_lat: input_lat.value
+        self.input_lon: copy.deepcopy(input_lon.value)
+        self.input_lat: copy.deepcopy(input_lat.value)
 
-        self.shapefile_loc = shapefile_loc.value
+        self.shapefile_loc = copy.deepcopy(shapefile_loc.value)
         
         self.errors = self.validate()
         self.valid = not self.errors
 
     def __str__(self) -> str:
-        # This is a bit nasty, but it'll dynamically capture all object attributes
         s = {}
         for k, v in self.__dict__.items():
             if not k.startswith("_"):
                 s[k] = v
         return pprint.pformat(s, indent=4)
 
-    def validate(self) -> List[str]: # TODO Rename or make static or something
+    def validate(self) -> List[str]:
         errors = []
         if not self.start_date:
             errors.append(f"You must enter a value for 'Start Date'")
@@ -363,8 +363,6 @@ def get_coords() -> Tuple[float, float, float, float]:
         gdf = gpd.read_file(vector_file) # -> GeoDataFrame
         # https://geopandas.org/docs/reference/api/geopandas.GeoDataFrame.html
         bounds = gdf.bounds
-        # TODO clin I've elected to cast as float to maintain functiono consistency,
-        # this loses precision but presumably doesn't matter?
         lon_low = float(round(gdf.bounds.minx, 2)[0])
         lon_high = float(round(gdf.bounds.maxx, 2)[0])
         lat_low = float(round(gdf.bounds.miny, 2)[0])
