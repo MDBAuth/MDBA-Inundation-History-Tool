@@ -154,7 +154,7 @@ parso=0.8.2=pyhd3eb1b0_0
 pcre=8.45=h295c915_0
 pexpect=4.8.0=pyhd3eb1b0_3
 pickleshare=0.7.5=pyhd3eb1b0_1003
-pillow=9.0.0=py38h5aabda8_0
+pillow=9.0.0=pypi_0
 pip=21.2.4=py38h06a4308_0
 pixman=0.40.0=h7f8727e_1
 plotly=5.1.0=pyhd3eb1b0_0
